@@ -1,0 +1,111 @@
+variables:
+  SOURCE_PATH: 'dist'
+  BUILD_VERSION: $CI_COMMIT_REF_NAME
+  GIT_DEPTH: 1
+
+stages:
+  - prep
+  - quality
+  - build
+  - deploy
+
+prep:
+  stage: prep
+  tags:
+    - lkpp-test
+  script:
+    - '& yarn install'
+  artifacts:
+    paths:
+      - node_modules
+  cache:
+    paths:
+      - node_modules
+
+
+type-check:
+  stage: quality
+  tags:
+    - lkpp-test
+  script:
+    - '& yarn install'
+    - '& yarn run type-check'
+  artifacts:
+    paths:
+      - public
+  dependencies:
+    - prep
+
+test-check:
+  stage: quality
+  tags:
+    - lkpp-test
+  script:
+    - '& yarn install'
+    - '& yarn run test:unit'
+  artifacts:
+    paths:
+      - public
+  dependencies:
+    - prep
+
+.build:
+  stage: build
+  tags:
+    - lkpp-test
+  script:
+    - '& yarn install'
+    - '& yarn run build:$PUBLISH_CONFIGURATION'
+  artifacts:
+    paths:
+      - dist
+  when: manual
+  dependencies:
+    - type-check
+    - test-check
+
+build_production:
+  extends: .build
+  variables:
+    PUBLISH_CONFIGURATION: 'production'
+
+build_development:
+  extends: .build
+  variables:
+    PUBLISH_CONFIGURATION: 'development'
+
+deploy_stage:
+  stage: deploy
+  tags:
+    - lkpp-test
+  when: manual
+  variables:
+    PUBLISH_PATH: 'C:\lkpp\lkppUI_New'
+  script:
+    - '& Copy-Item -Path "$env:SOURCE_PATH\*" -Destination "$env:PUBLISH_PATH\" -Recurse -Force'
+
+docker_build_image:
+  rules:
+    - if: '$CI_COMMIT_TAG != null'
+  tags:
+    - m1-lkpp-preprod
+  image: docker:stable
+  services:
+    - docker:dind
+  stage: deploy
+  before_script: docker login $DOCKER_REGISTRY -u $DOCKER_REGISTRY_LOGIN -p $DOCKER_REGISTRY_PASS
+  script:
+    - DOCKER_BUILDKIT=1 docker build -t $DOCKER_REGISTRY/front-new-release:$CI_COMMIT_TAG -t $DOCKER_REGISTRY/front-new-release:latest .
+    - docker push $DOCKER_REGISTRY/front-new-release:$CI_COMMIT_TAG
+    - docker push $DOCKER_REGISTRY/front-new-release:latest
+  after_script:
+    - docker logout $DOCKER_REGISTRY
+  when: manual
+
+trigger:deploy_lkpp:
+  rules:
+    - if: '$CI_COMMIT_TAG != null'
+  when: manual
+  stage: deploy
+  trigger:
+    project: infra-m1-cloud/lkpp-deploy

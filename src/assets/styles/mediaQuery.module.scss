@@ -1,0 +1,21 @@
+@import 'breaks.module';
+
+@mixin respond-to($media) {
+  @if $media == md {
+    @media only screen and (min-width: $break_744) {
+      @content;
+    }
+  } @else if $media == lg {
+    @media only screen and (min-width: $break_1140) {
+      @content;
+    }
+  } @else if $media == xl {
+    @media only screen and (min-width: $break_1360) {
+      @content;
+    }
+  } @else if $media == 2xl {
+    @media only screen and (min-width: $break_1520) {
+      @content;
+    }
+  }
+}

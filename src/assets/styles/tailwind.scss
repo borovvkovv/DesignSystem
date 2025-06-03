@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @import 'text-headers';
+  @import 'text-sizes';
+}
+
+@layer components {
+  @import 'links';
+}
+
+@layer utilities {
+  @import 'layout-grid';
+}

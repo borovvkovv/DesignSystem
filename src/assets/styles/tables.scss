@@ -1,0 +1,46 @@
+@import '@/assets/styles/colors.module.scss';
+@import '@/assets/styles/typography.module';
+
+.table {
+  table-layout: fixed;
+  background-color: $white;
+  color: $black1;
+  @include body_desktop(4);
+  border-radius: 6px;
+  border-collapse: collapse;
+  border-style: hidden;
+
+  &_row {
+    height: 72px;
+  }
+
+  &_col {
+    vertical-align: middle;
+    border-top: 1px solid $blueGrey5;
+    color: $grey2;
+    padding: 0 24px;
+
+    &__orders {
+      width: 200px;
+      color: $black1;
+    }
+
+    &__type {
+      width: 130px;
+    }
+
+    &__total {
+      width: 140px;
+      text-align: right;
+      @include body_desktop(2);
+    }
+
+    &__negative {
+      color: $red3;
+    }
+
+    &__positive {
+      color: $green1;
+    }
+  }
+}

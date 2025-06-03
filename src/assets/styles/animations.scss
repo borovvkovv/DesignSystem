@@ -1,0 +1,28 @@
+@import 'colors.module';
+
+.background-animation {
+  background-image: radial-gradient(33% 33% at 50% 50%, $darkBlue4 33%, $darkBlue2 100%);
+  animation: gradient 15s linear infinite;
+  background-size: 200% 200%;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 50% 50%;
+  }
+  20% {
+    background-position: 25% 50%;
+  }
+  40% {
+    background-position: 75% 20%;
+  }
+  60% {
+    background-position: 70% 60%;
+  }
+  80% {
+    background-position: 20% 20%;
+  }
+  100% {
+    background-position: 50% 50%;
+  }
+}

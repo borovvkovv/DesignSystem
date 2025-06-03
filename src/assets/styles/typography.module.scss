@@ -1,0 +1,35 @@
+@mixin body_desktop($size) {
+  font-style: normal;
+  font-weight: 400;
+
+  @if $size == 1 {
+    font-size: 28px;
+    line-height: 33px;
+  } @else if $size == 2 {
+    font-size: 20px;
+    line-height: 28px;
+  } @else if $size == 3 {
+    font-size: 18px;
+    line-height: 26px;
+  } @else if $size == 4 {
+    font-size: 16px;
+    line-height: 24px;
+  } @else if $size == 5 {
+    font-size: 14px;
+    line-height: 22px;
+  } @else if $size == 6 {
+    font-size: 13px;
+    line-height: 20px;
+  } @else {
+    font-size: 12px;
+    line-height: 18px;
+  }
+}
+
+@mixin body_tablet($size) {
+  @include body_desktop($size + 1);
+}
+
+@mixin body_mobile($size) {
+  @include body_desktop($size + 1);
+}

@@ -1,0 +1,7 @@
+@import 'link.module';
+
+@for $i from 1 to 11 {
+  .link_Style#{$i} {
+    @include link($i);
+  }
+}
