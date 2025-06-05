@@ -1,1 +1,1 @@
-Gh Pages - https://borovvkovv.github.io/design-system/
+GH Pages - https://borovvkovv.github.io/design-system/
